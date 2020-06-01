@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "raw_hid.h"
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -166,3 +167,24 @@ uint32_t layer_state_set_user(uint32_t state) {
   }
   return state;
 };
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    if (length == 0) return;
+    uint8_t c = data[0];
+
+    if (c & 0x1) {
+        ergodox_right_led_1_on();
+    } else {
+        ergodox_right_led_1_off();
+    }
+    if (c & 0x2) {
+        ergodox_right_led_2_on();
+    } else {
+        ergodox_right_led_2_off();
+    }
+    if (c & 0x4) {
+        ergodox_right_led_3_on();
+    } else {
+        ergodox_right_led_3_off();
+    }
+}
